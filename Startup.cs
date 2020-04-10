@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace GDayMateBackend
 {
@@ -33,6 +34,14 @@ namespace GDayMateBackend
             {
                 o.UseNpgsql(Configuration.GetConnectionString("GDayMateDb"));
             });
+            services.AddSwaggerGen(o =>
+            {
+                o.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "GDayMate API Docs",
+                    Version = "v1"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +51,13 @@ namespace GDayMateBackend
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(o =>
+            {
+                o.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                o.RoutePrefix = "docs";
+            });
 
             app.UseHttpsRedirection();
 
