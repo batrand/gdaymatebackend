@@ -12,6 +12,7 @@ namespace GDayMateBackend.Data
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<PhoneCheckIn> PhoneCheckIns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +22,7 @@ namespace GDayMateBackend.Data
             modelBuilder.Entity<Organisation>().ToTable("Organisations");
             modelBuilder.Entity<Location>().ToTable("Locations");
             modelBuilder.Entity<Country>().ToTable("Countries");
+            modelBuilder.Entity<PhoneCheckIn>().ToTable("PhoneCheckIns");
 
         }
     }
