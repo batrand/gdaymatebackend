@@ -42,11 +42,18 @@ namespace GDayMateBackend
                     Version = "v1"
                 });
             });
+            services.AddCors(o =>
+                o.AddPolicy("AllowAllPolicy", b =>
+                {
+                    b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("AllowAllPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
