@@ -105,5 +105,28 @@ namespace GDayMateBackend.Controllers
         {
             return _context.Organisations.Any(e => e.Id == id);
         }
+
+        /// <summary>
+        /// Get a list of matching users for this organisation
+        /// </summary>
+        /// <param name="oid">ID of the organisation</param>
+        /// <returns>A list of users who share the same postcode and has needs the organisation can fulfil</returns>
+        [HttpGet("{oid}/matches")]
+        public async Task<ActionResult<IEnumerable<User>>> GetMatchingUsers(long oid)
+        {
+            var organisation = await _context.Organisations.FindAsync(oid);
+
+            var localUsers = await _context.Users
+                .Where(u => u.Location == organisation.Location)
+                .ToListAsync();
+
+            var matchUsers = new List<User>();
+            foreach (var u in localUsers)
+            foreach(var n in u.Needs)
+                if(organisation.Services.Contains(n))
+                    matchUsers.Add(u);
+
+            return Ok(matchUsers);
+        }
     }
 }
