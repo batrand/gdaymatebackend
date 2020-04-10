@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GDayMateBackend.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GDayMateBackend.Controllers
 {
@@ -21,23 +22,18 @@ namespace GDayMateBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddPhoneCheckIn([FromBody] RawPhoneCheckIn rawCheckIn)
         {
-            var error = "";
-            try
+            var checkin = new PhoneCheckIn
             {
-                var checkin = new PhoneCheckIn
-                {
-                    PhoneNumber = rawCheckIn.Detail.Destination,
-                    Responses = rawCheckIn.Detail.ResponsesString,
-                    Timestamp = DateTimeOffset.ParseExact(rawCheckIn.Timestamp, @"yyyy-MM-dd HH:mm:ss.ffffff", null)
-                };
-                await _context.PhoneCheckIns.AddAsync(checkin);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                error = e.Message;
-            }
-            return Ok($"{error}");
+                PhoneNumber = rawCheckIn.Detail.Destination,
+                Responses = rawCheckIn.Detail.ResponsesString,
+                Timestamp = DateTimeOffset.ParseExact(rawCheckIn.Timestamp, @"yyyy-MM-dd HH:mm:ss.ffffff", null)
+            };
+            await _context.PhoneCheckIns.AddAsync(checkin);
+
+            // TODO: parse check in and RedirectToAction to checkin and add new checkin here
+            
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }
