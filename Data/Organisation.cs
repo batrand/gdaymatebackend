@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GDayMateBackend.Data
 {
@@ -10,5 +11,6 @@ namespace GDayMateBackend.Data
 
         public string Name { get; set; }
         public string Location { get; set; }
+        public List<string> Services { get; set; }
     }
 }
